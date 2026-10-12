@@ -58,7 +58,14 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 async function loadSiteContent(){
   try {
     const {data,error}=await sb.from("site_content").select("content").eq("id","main").maybeSingle();
-    if(error || !data || !data.content) return;
+    if (error) {
+  alert("Supabase Error: " + error.message);
+  return;
+}
+if (!data || !data.content) {
+  alert("Supabase میں ویب سائٹ کا مواد نہیں ملا۔");
+  return;
+}
     const c=data.content;
     if(Array.isArray(c.teachers)){
       document.getElementById("teacherItems").innerHTML=c.teachers.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><p>مضمون: ${esc(t.subject)}</p></div>`).join("");
